@@ -1,0 +1,108 @@
+请在tab固定长度（4空格）模式下打开
+
+
+
+GardensOS 变量前缀解析
+
+gardens.			底层类
+gardens.switch 		开关类
+gardens.video		显示配置
+gardens.msg		信息文本
+gardens.path		路径缓存
+gardens.raw		原始类，在返回前不得更改
+gardens.gdb		调试变量（gardens debug bridge）
+gardens.language		语言控制类
+gardens.txt		语言文本
+gardens.tmp		临时变量
+gardens.echo		构造显示内容
+a-z			底层库临时变量（仅用于函数内部，且函数互不调用）
+A-Z			二级库临时变量（用于库中库，但不用于私有库）
+return			函数回文
+
+
+GardensOS 内置库
+
+_str_,_boer_,_system_,_ini_,_sleep_,_draw_,_display_
+
+library_boer_reverse		将变量的布尔类型反转
+library_boer_check_true	检查变量的布尔类型，默认输出true
+library_boer_check_false	检查变量的布尔类型，默认输出false
+library_draw_blank		输出一定数量的空行
+library_str_long		检查变量中字符串的长度，不能有空格和特殊字符
+library_str_random		随机数，1开头
+library_str_replace_vbs	使得bat的环境变量能够正确处理并被vbs所接受
+library_str_captrans		变量内字符串大小写转化
+library_sleep_ping		ping延时，一般不用
+library_ini_read		读取ini文件
+library_ini_local		读取内置文本中的ini信息
+library_language_local	读取内置文本中的语言
+library_system_reset		应用所有设置，或重置
+library_system_dump	清空所有临时变量
+library_system_sudo		以管理员身份运行命令
+library_system_writeBoard	将变量内的字符串写入剪切板
+library_cmd_checker	CMD命令行拆分器，萌新专用
+library_display_info		显示内置信息文本，被标签info标记出来的片段
+library_display_set		显示内置设置，被标签install标记出来的片段
+library_init		简单的信息显示，单行但带换行
+library_test		测试用的
+
+
+GardensOS 外部调用
+
+-info			显示文本信息
+-gdb			启动Gardens Debug Bridge模式（library）
+-init			简单的信息显示？
+-import			将GardensKernel作为模块导入
+-gar			调用GardensKernel中的二级库
+-lib			调用GardensKernel中的底层库
+
+
+GardensOS 配置文件
+
+gardens.version		GardensOS版本号
+gardens.build		GardensOS封包时间戳
+gardens.rights		GardensOS版权所有方
+gardens.friends		GardensOS协助版权方
+gardens.name		GardensOS系统名称
+gardens.language		GardensOS所使用的语言
+gardens.video.clos		屏幕宽度
+gardens.video.lines		屏幕长度
+gardens.video.chcp		活动代码页
+gardens.video.text		文字文本的颜色
+gardens.video.ground	背景色
+
+以下不需要写在外部配置文件当中
+gardens.switch.outset	读取外部配置文件的开关
+gardens.switch.debug	调试模式的开关
+gardens.switch.import	调用模式的开关
+gardens.path.outset	外部配置文件的地址
+
+以下是内部变量
+switch_import		作为模块导入的开关
+
+
+GardensOS 二级库
+
+gardens_language		加载语言
+gardens_loadset		加载设置
+gardens_diskmanage	挂载磁盘
+gardens_tmouse		控制台鼠标操作
+
+
+对于GardensOS的一点想法
+
+1，被调用后有一个%*的字符串序列，我们顺序分析执行再使用shift指令向后推。
+2，if /i "%~1"=="-import" (set [command]=call "%~0"&goto :EOF)
+	这样可以省去路径处理和调用参数处理的问题，简化调用部分。
+3，if defined
+	检查变量是否存在，但不可以嵌套！可以检查入口函数！！
+	如果存在嵌套需要用 if "%value!argv!%" == ""
+4，常用的字母序列
+	for %%i in (a b c d e f g h i j k l m n o p q r s t u v w x y z) do
+	for %%i in (A B C D E F G H I J K L M N O P Q R S T U V W X Y Z) do
+5，使用代码编程，我们通过隐式的声明模块可以将庞杂的代码块简化！
+	比如：gar到了后期只需要调用（call）,变量组,逻辑与判断和跳转，不需要其他的代码了。
+	分开编程：一部分管执行，另一部分管逻辑，并有一个从底层到前端完整的库的支持。
+6，环境变量的操作中不仅存在切片（%value:~n,m%）,还存在取代替换（%value:argv1=argv2%）。
+7，我们可以通过%debug%的方法来开启或关闭调试模式。
+8，语句块内命令共享同一生命周期，想到这那这句应该可以被()，然后断行来替找。

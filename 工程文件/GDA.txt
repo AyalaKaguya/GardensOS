@@ -1,0 +1,37 @@
+GDA（GardensDrawAPI）记录文本
+变量：
+
+	输入变量：
+	GDA_lines	判断渲染的最大行数，暂时没用
+	GDA_clos		判断渲染的最大宽度
+	GDA_command 	对文本执行操作的命令
+	GDA_text1	缓冲文本1
+	GDA_text2	缓存文本2
+	GDA_text*	缓冲文本
+	GDA_title		缓冲标题
+	GDA_blank	开头空行计数
+	GDA_form	渲染表格的样式
+	GDA_shell		快速界面脚本地址
+
+	输出变量：
+	return		回文，暂时没用
+	errorlevel		错误代码
+
+	开关变量：
+	GDA_b_shell	布尔值，用于执行快速界面脚本
+
+	内部变量：
+	%*		无需注意
+	C*		同%*
+	gdb_command	GDB的命令行缓冲
+	i		临时变量，计数
+	str		字符串处理临时变量
+	return		内部函数回文（重要）
+	num		随机数计算变量
+	t_line		递归行数时的临时变量
+
+调用参数：
+
+	-gdb [-library,...]		启用GardensDebugBridge
+	-shell <path>		调用快速界面脚本
+	-build			执行变量处理
